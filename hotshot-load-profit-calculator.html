@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hotshot Trucking Load Profit & Cost-Per-Mile Calculator (Free) | AltAngle</title>
+  <meta name="description" content="Free hotshot and owner-operator load profit calculator. Enter the rate, loaded and deadhead miles, fuel price, MPG, and fixed costs to see your true cost per mile, net profit, and the minimum rate to accept." />
+  <meta name="keywords" content="hotshot load calculator, cost per mile calculator trucking, owner operator profit calculator, hotshot rate per mile, deadhead calculator" />
+  <link rel="canonical" href="./hotshot-load-profit-calculator.html" />
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"FAQPage","mainEntity":[
+   {"@type":"Question","name":"How do I calculate cost per mile for a hotshot truck?","acceptedAnswer":{"@type":"Answer","text":"Add fuel, per-mile variable costs (tires, maintenance, DEF), and your share of fixed monthly costs (truck and trailer payments, insurance, permits, phone/ELD), then divide by the total miles driven including deadhead."}},
+   {"@type":"Question","name":"What is a good rate per mile for hotshot loads?","acceptedAnswer":{"@type":"Answer","text":"A good rate is one that covers your all-in cost per mile on total miles (loaded plus deadhead) and leaves your target profit. Use this calculator's minimum-rate result rather than a national average."}}
+  ]}
+  </script>
+  <style>
+    :root { --navy:#1e3a5f; --teal:#0d9488; --bg:#f8fafc; --card:#fff; --border:#cbd5e1; --red:#b91c1c; --green:#15803d; }
+    * { box-sizing:border-box; font-family:system-ui,-apple-system,sans-serif; }
+    body { margin:0; background:var(--bg); color:#0f172a; line-height:1.5; }
+    header { background:var(--navy); color:#fff; padding:1.75rem 1rem; text-align:center; }
+    header h1 { margin:0 0 .5rem; font-size:1.6rem; }
+    header p { margin:0; opacity:.9; font-size:.98rem; }
+    nav { margin-top:.75rem; }
+    nav a { color:#99f6e4; margin:0 .6rem; text-decoration:none; font-weight:600; font-size:.92rem; display:inline-block; }
+    main { max-width:860px; margin:1.5rem auto; padding:0 1rem 3rem; }
+    .card { background:var(--card); border:1px solid var(--border); border-radius:12px; padding:1.5rem; box-shadow:0 2px 6px rgba(0,0,0,.04); margin-bottom:1.25rem; }
+    h2 { margin-top:0; color:var(--navy); font-size:1.3rem; border-bottom:2px solid #e2e8f0; padding-bottom:.5rem; }
+    h3 { color:var(--navy); font-size:1.05rem; margin:1rem 0 .5rem; }
+    .grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(210px,1fr)); gap:1rem; }
+    label { display:block; font-weight:600; font-size:.9rem; margin-bottom:.3rem; }
+    input { width:100%; padding:.6rem; border:1px solid var(--border); border-radius:8px; font-size:1rem; }
+    .results { display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:.75rem; margin-top:1rem; }
+    .stat { background:#f1f5f9; border-radius:10px; padding:.9rem; text-align:center; }
+    .stat .v { font-size:1.45rem; font-weight:700; color:var(--navy); }
+    .stat .l { font-size:.82rem; color:#475569; }
+    .verdict { margin-top:1rem; padding:1rem; border-radius:10px; font-weight:600; text-align:center; }
+    .good { background:#dcfce7; color:var(--green); } .bad { background:#fee2e2; color:var(--red); } .meh { background:#fef9c3; color:#854d0e; }
+    .aff li { margin:.4rem 0; } .aff a { color:var(--teal); font-weight:600; }
+    small { color:#64748b; }
+    footer { text-align:center; font-size:.8rem; color:#64748b; padding:1rem; }
+  </style>
+</head>
+<body>
+<header>
+  <h1>Hotshot Load Profit &amp; Cost-Per-Mile Calculator</h1>
+  <p>Know your real profit before you book the load: deadhead, fuel, and fixed costs included.</p>
+  <nav>
+    <a href="./index.html">Home</a>
+    <a href="./grubhub-calculator.html">Grubhub Payout</a>
+    <a href="./solar-calculator.html">Solar Sizing</a>
+    <a href="./debt-snowball-calculator.html">Debt Snowball</a>
+  </nav>
+</header>
+<main>
+  <section class="card">
+    <h2>1. The Load</h2>
+    <div class="grid">
+      <div><label for="rate">Load rate offered ($)</label><input id="rate" type="number" value="1800" min="0" step="10"></div>
+      <div><label for="loaded">Loaded miles</label><input id="loaded" type="number" value="650" min="0"></div>
+      <div><label for="dead">Deadhead miles (empty to pickup / home)</label><input id="dead" type="number" value="120" min="0"></div>
+      <div><label for="days">Days on this load</label><input id="days" type="number" value="2" min="0.5" step="0.5"></div>
+    </div>
+    <h3>Fuel &amp; per-mile costs</h3>
+    <div class="grid">
+      <div><label for="fuel">Diesel price ($/gal)</label><input id="fuel" type="number" value="3.85" step="0.01"></div>
+      <div><label for="mpgL">MPG loaded</label><input id="mpgL" type="number" value="10" step="0.1"></div>
+      <div><label for="mpgE">MPG empty</label><input id="mpgE" type="number" value="13" step="0.1"></div>
+      <div><label for="cpm">Tires + maintenance + DEF ($/mile)</label><input id="cpm" type="number" value="0.18" step="0.01"></div>
+      <div><label for="other">Tolls, scales, lumper, parking ($)</label><input id="other" type="number" value="40"></div>
+      <div><label for="disp">Dispatch / factoring fee (%)</label><input id="disp" type="number" value="8" step="0.5"></div>
+    </div>
+    <h3>Fixed monthly costs</h3>
+    <div class="grid">
+      <div><label for="fixed">Truck + trailer payments, insurance, permits, ELD, phone ($/month)</label><input id="fixed" type="number" value="3200"></div>
+      <div><label for="work">Working days per month</label><input id="work" type="number" value="20"></div>
+      <div><label for="target">Target profit ($/day)</label><input id="target" type="number" value="300"></div>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>2. Results</h2>
+    <div class="results">
+      <div class="stat"><div class="v" id="rLoaded">$0</div><div class="l">Rate per loaded mile</div></div>
+      <div class="stat"><div class="v" id="rAll">$0</div><div class="l">Rate per total mile</div></div>
+      <div class="stat"><div class="v" id="rCpm">$0</div><div class="l">Your all-in cost per mile</div></div>
+      <div class="stat"><div class="v" id="rFuel">$0</div><div class="l">Fuel cost</div></div>
+      <div class="stat"><div class="v" id="rCost">$0</div><div class="l">Total cost of load</div></div>
+      <div class="stat"><div class="v" id="rNet">$0</div><div class="l">Net profit</div></div>
+      <div class="stat"><div class="v" id="rDay">$0</div><div class="l">Net profit per day</div></div>
+      <div class="stat"><div class="v" id="rMin">$0</div><div class="l">Minimum rate to hit your target</div></div>
+    </div>
+    <div class="verdict meh" id="verdict">Enter your numbers above.</div>
+    <p><small>Deadhead miles are counted in cost per mile because the truck burns fuel and wears tires whether it's loaded or not. Fixed costs are spread over your working days.</small></p>
+  </section>
+
+  <section class="card">
+    <h2>Tools that help lower cost per mile</h2>
+    <ul class="aff">
+      <li><a href="https://www.amazon.com/s?k=hotshot+load+straps+ratchet&tag=${AFFILIATE_TAG}" target="_blank" rel="noopener sponsored">Heavy-duty ratchet straps &amp; winch bars for flatbed hotshot</a></li>
+      <li><a href="https://www.amazon.com/s?k=truck+tire+pressure+monitoring+system&tag=${AFFILIATE_TAG}" target="_blank" rel="noopener sponsored">Trailer tire pressure monitoring system (TPMS)</a></li>
+      <li><a href="https://www.amazon.com/s?k=trucker+gps+navigation&tag=${AFFILIATE_TAG}" target="_blank" rel="noopener sponsored">Truck-routing GPS to cut wasted miles</a></li>
+      <li><a href="#gumroad-pack">Hotshot Load, Fuel &amp; Profit Tracker: Excel + printable PDF pack</a></li>
+    </ul>
+    <p><small>Some links are affiliate links; we may earn a small commission at no extra cost to you.</small></p>
+  </section>
+
+  <section class="card">
+    <h2>FAQ</h2>
+    <h3>How do I calculate cost per mile for a hotshot truck?</h3>
+    <p>Add fuel, per-mile wear costs, and your daily share of fixed costs, then divide by every mile you drove, loaded and empty. That's the number a load has to beat.</p>
+    <h3>What's a good rate per mile for hotshot?</h3>
+    <p>It depends on your costs, lane, and deadhead. Use the minimum-rate result above: anything below it loses money or misses your profit goal, no matter how good the loaded-mile rate looks.</p>
+  </section>
+</main>
+<footer>&copy; 2026 AltAngle Calculators. Estimates only; not financial or tax advice.</footer>
+<script>
+  const ids=['rate','loaded','dead','days','fuel','mpgL','mpgE','cpm','other','disp','fixed','work','target'];
+  const $=id=>document.getElementById(id);
+  const n=id=>parseFloat($(id).value)||0;
+  const usd=v=>(v<0?'-$':'$')+Math.abs(v).toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2});
+  function calc(){
+    const rate=n('rate'),L=n('loaded'),D=n('dead'),days=Math.max(n('days'),0.5),miles=L+D;
+    const fuel=(n('mpgL')?L/n('mpgL'):0)*n('fuel')+(n('mpgE')?D/n('mpgE'):0)*n('fuel');
+    const wear=miles*n('cpm');
+    const fixed=(n('work')?n('fixed')/n('work'):0)*days;
+    const fee=rate*n('disp')/100;
+    const costNoFee=fuel+wear+fixed+n('other');
+    const cost=costNoFee+fee;
+    const net=rate-cost, perDay=net/days;
+    const minRate=(costNoFee+n('target')*days)/(1-n('disp')/100||1);
+    $('rLoaded').textContent=usd(L?rate/L:0);
+    $('rAll').textContent=usd(miles?rate/miles:0);
+    $('rCpm').textContent=usd(miles?cost/miles:0);
+    $('rFuel').textContent=usd(fuel);
+    $('rCost').textContent=usd(cost);
+    $('rNet').textContent=usd(net);
+    $('rDay').textContent=usd(perDay);
+    $('rMin').textContent=usd(minRate);
+    const v=$('verdict');
+    if(net<0){v.className='verdict bad';v.textContent='This load loses '+usd(-net)+'. Counter at '+usd(minRate)+' or pass.';}
+    else if(perDay<n('target')){v.className='verdict meh';v.textContent='Profitable, but under your daily target. Ask for '+usd(minRate)+'.';}
+    else{v.className='verdict good';v.textContent='Good load: '+usd(perDay)+' per day net, above your target.';}
+  }
+  ids.forEach(id=>$(id).addEventListener('input',calc)); calc();
+</script>
+</body>
+</html>

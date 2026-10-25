@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Debt Snowball Payoff & Interest Savings Calculator | AltAngle</title>
+  <meta name="description" content="Free interactive Debt Snowball payoff timeline and interest savings calculator." />
+  <style>
+    :root { --navy: #1e3a5f; --teal: #0d9488; --bg: #f8fafc; --card: #ffffff; --border: #cbd5e1; }
+    * { box-sizing: border-box; font-family: system-ui, -apple-system, sans-serif; }
+    body { margin: 0; background: var(--bg); color: #0f172a; line-height: 1.5; }
+    header { background: var(--navy); color: #fff; padding: 1.75rem 1rem; text-align: center; }
+    header h1 { margin: 0 0 0.5rem; font-size: 1.6rem; }
+    header p { margin: 0; opacity: 0.9; font-size: 0.98rem; }
+    nav { margin-top: 0.75rem; }
+    nav a { color: #99f6e4; margin: 0 0.6rem; text-decoration: none; font-weight: 600; font-size: 0.92rem; }
+    nav a:hover { text-decoration: underline; }
+    main { max-width: 860px; margin: 1.5rem auto; padding: 0 1rem 3rem; }
+    .card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem; box-shadow: 0 2px 6px rgba(0,0,0,0.04); }
+    h2 { margin-top: 0; color: var(--navy); font-size: 1.3rem; border-bottom: 2px solid #e2e8f0; padding-bottom: 0.5rem; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 1rem; margin-bottom: 1rem; }
+    label { display: block; font-size: 0.88rem; font-weight: 600; margin-bottom: 0.3rem; color: #334155; }
+    input, select { width: 100%; padding: 0.6rem; border: 1px solid var(--border); border-radius: 6px; font-size: 1rem; }
+    button { background: var(--teal); color: #fff; border: none; padding: 0.75rem 1.25rem; font-size: 1rem; font-weight: 600; border-radius: 6px; cursor: pointer; }
+    button:hover { opacity: 0.92; }
+    .results { background: #f0fdfa; border: 1px solid #99f6e4; border-radius: 8px; padding: 1rem; margin-top: 1rem; }
+    .rec-list { margin-top: 1rem; padding-left: 1.2rem; }
+    .rec-list li { margin-bottom: 0.5rem; }
+    .rec-list a { color: var(--teal); font-weight: 600; text-decoration: none; }
+    .rec-list a:hover { text-decoration: underline; }
+    .disclosure { font-size: 0.8rem; color: #64748b; margin-top: 2rem; text-align: center; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Debt Snowball Payoff &amp; Interest Savings Calculator</h1>
+    <p>Compare your minimum-payment payoff time against an accelerated Debt Snowball plan</p>
+    <nav>
+      <a href="./index.html">All Calculators</a>
+      <a href="./solar-calculator.html">Solar Sizing Calculator</a>
+      <a href="./debt-snowball-calculator.html">Debt Snowball Calculator</a>
+    </nav>
+  </header>
+  <main>
+    <section class="card" id="debt-calculator">
+      <h2>Debt Snowball &amp; Interest Savings Calculator</h2>
+      <div class="grid">
+        <div>
+          <label for="debtBal">Total Debt Balance ($)</label>
+          <input type="number" id="debtBal" value="12500" min="100" step="100" />
+        </div>
+        <div>
+          <label for="debtApr">Average Interest Rate (APR %)</label>
+          <input type="number" id="debtApr" value="18.9" min="1" max="40" step="0.1" />
+        </div>
+        <div>
+          <label for="minPay">Current Minimum Payment ($/mo)</label>
+          <input type="number" id="minPay" value="320" min="25" step="10" />
+        </div>
+        <div>
+          <label for="extraPay">Extra Snowball Payment ($/mo)</label>
+          <input type="number" id="extraPay" value="250" min="0" step="25" />
+        </div>
+      </div>
+      <button onclick="calcDebt()">Calculate Debt Payoff Timeline</button>
+      <div class="results" id="debtOut"></div>
+    </section>
+  </main>
+  <p class="disclosure">Disclosure: Links to recommended gear or templates may include affiliate or creator referral tags at zero extra cost to you.</p>
+  <script>
+    function calcDebt() {
+      const bal = parseFloat(document.getElementById('debtBal').value) || 12500;
+      const apr = (parseFloat(document.getElementById('debtApr').value) || 18.9) / 100 / 12;
+      const minP = parseFloat(document.getElementById('minPay').value) || 320;
+      const extraP = parseFloat(document.getElementById('extraPay').value) || 250;
+      function sim(pay) {
+        let b = bal, m = 0, totInt = 0;
+        while (b > 0 && m < 600) {
+          const i = b * apr;
+          totInt += i;
+          if (pay <= i) return { m: 999, totInt: 0 };
+          b = b + i - pay;
+          m++;
+        }
+        return { m, totInt };
+      }
+      const base = sim(minP);
+      const snow = sim(minP + extraP);
+      const saved = Math.max(0, base.totInt - snow.totInt);
+      document.getElementById('debtOut').innerHTML = `
+        <strong>Payoff Comparison:</strong><br/>
+        • With Minimum Payments ($${minP}/mo): <strong>${base.m >= 600 ? "Never (payment below monthly interest)" : base.m + " months"}</strong> ($${base.totInt.toFixed(0)} total interest)<br/>
+        • With Extra Snowball ($${minP + extraP}/mo): <strong>${snow.m} months</strong> ($${snow.totInt.toFixed(0)} total interest)<br/>
+        • Total Interest Saved: <strong>$${saved.toFixed(0)}</strong> and <strong>${Math.max(0, base.m - snow.m)} months faster!</strong>
+        <ul class="rec-list">
+          <li><a href="#gumroad-pack" target="_blank" rel="noopener">Download the 4-Tab Automated Zero-Based Budget &amp; Debt Snowball Excel + Printable PDF Pack ($9 on Gumroad)</a></li>
+        </ul>
+      `;
+    }
+    calcDebt();
+  </script>
+</body>
+</html>

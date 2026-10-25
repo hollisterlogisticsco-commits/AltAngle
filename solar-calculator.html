@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Off-Grid 12V/24V/48V Solar Battery, Inverter & Wire Size Calculator | AltAngle</title>
+  <meta name="description" content="Free interactive 12V/24V/48V solar battery bank, pure sine inverter, fuse, and copper wire gauge sizing calculator." />
+  <style>
+    :root { --navy: #1e3a5f; --teal: #0d9488; --bg: #f8fafc; --card: #ffffff; --border: #cbd5e1; }
+    * { box-sizing: border-box; font-family: system-ui, -apple-system, sans-serif; }
+    body { margin: 0; background: var(--bg); color: #0f172a; line-height: 1.5; }
+    header { background: var(--navy); color: #fff; padding: 1.75rem 1rem; text-align: center; }
+    header h1 { margin: 0 0 0.5rem; font-size: 1.6rem; }
+    header p { margin: 0; opacity: 0.9; font-size: 0.98rem; }
+    nav { margin-top: 0.75rem; }
+    nav a { color: #99f6e4; margin: 0 0.6rem; text-decoration: none; font-weight: 600; font-size: 0.92rem; }
+    nav a:hover { text-decoration: underline; }
+    main { max-width: 860px; margin: 1.5rem auto; padding: 0 1rem 3rem; }
+    .card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem; box-shadow: 0 2px 6px rgba(0,0,0,0.04); }
+    h2 { margin-top: 0; color: var(--navy); font-size: 1.3rem; border-bottom: 2px solid #e2e8f0; padding-bottom: 0.5rem; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 1rem; margin-bottom: 1rem; }
+    label { display: block; font-size: 0.88rem; font-weight: 600; margin-bottom: 0.3rem; color: #334155; }
+    input, select { width: 100%; padding: 0.6rem; border: 1px solid var(--border); border-radius: 6px; font-size: 1rem; }
+    button { background: var(--teal); color: #fff; border: none; padding: 0.75rem 1.25rem; font-size: 1rem; font-weight: 600; border-radius: 6px; cursor: pointer; }
+    button:hover { opacity: 0.92; }
+    .results { background: #f0fdfa; border: 1px solid #99f6e4; border-radius: 8px; padding: 1rem; margin-top: 1rem; }
+    .rec-list { margin-top: 1rem; padding-left: 1.2rem; }
+    .rec-list li { margin-bottom: 0.5rem; }
+    .rec-list a { color: var(--teal); font-weight: 600; text-decoration: none; }
+    .rec-list a:hover { text-decoration: underline; }
+    .disclosure { font-size: 0.8rem; color: #64748b; margin-top: 2rem; text-align: center; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Off-Grid 12V / 24V / 48V Solar Battery, Inverter &amp; Wire Size Calculator</h1>
+    <p>Calculate usable LiFePO4 battery capacity, inverter amperage, Class-T fuse sizing, and copper wire gauge</p>
+    <nav>
+      <a href="./index.html">All Calculators</a>
+      <a href="./solar-calculator.html">Solar Sizing Calculator</a>
+      <a href="./debt-snowball-calculator.html">Debt Snowball Calculator</a>
+    </nav>
+  </header>
+  <main>
+    <section class="card" id="solar-calculator">
+      <h2>Off-Grid Solar Battery, Inverter &amp; Wire Gauge Calculator</h2>
+      <div class="grid">
+        <div>
+          <label for="dailyWh">Daily Energy Load (Watt-Hours / day)</label>
+          <input type="number" id="dailyWh" value="5000" min="100" step="100" />
+        </div>
+        <div>
+          <label for="peakWatts">Peak Running Load (Watts)</label>
+          <input type="number" id="peakWatts" value="2500" min="100" step="100" />
+        </div>
+        <div>
+          <label for="sysVolt">System Battery Voltage</label>
+          <select id="sysVolt">
+            <option value="48" selected>48V (51.2V LiFePO4 - Recommended)</option>
+            <option value="24">24V (25.6V LiFePO4)</option>
+            <option value="12">12V (12.8V LiFePO4)</option>
+          </select>
+        </div>
+        <div>
+          <label for="sunHours">Peak Sun Hours / Day</label>
+          <input type="number" id="sunHours" value="4.8" min="2" max="8" step="0.1" />
+        </div>
+      </div>
+      <button onclick="calcSolar()">Calculate Solar &amp; Wire Specs</button>
+      <div class="results" id="solarOut"></div>
+    </section>
+  </main>
+  <p class="disclosure">Disclosure: Links to recommended gear or templates may include affiliate or creator referral tags at zero extra cost to you.</p>
+  <script>
+    const AFFILIATE_TAG = "YOUR_AFFILIATE_TAG";
+    function calcSolar() {
+      const wh = parseFloat(document.getElementById('dailyWh').value) || 5000;
+      const watts = parseFloat(document.getElementById('peakWatts').value) || 2500;
+      const v = parseInt(document.getElementById('sysVolt').value, 10) || 48;
+      const sun = parseFloat(document.getElementById('sunHours').value) || 4.8;
+      const nominalV = v === 48 ? 51.2 : (v === 24 ? 25.6 : 12.8);
+      const usableKwh = (wh / 0.8 / 1000).toFixed(2);
+      const amps = Math.ceil((watts * 1.15) / v);
+      const fuseAmps = Math.ceil((amps * 1.25) / 25) * 25;
+      const wireGauge = amps <= 65 ? "4 AWG or 2 AWG Copper" : (amps <= 120 ? "1/0 AWG Copper" : "4/0 AWG Welding Cable");
+      const pvWatts = Math.ceil((wh * 1.25) / sun);
+      document.getElementById('solarOut').innerHTML = `
+        <strong>Recommended System Sizing (${v}V Nominal / ${nominalV}V LiFePO4):</strong><br/>
+        • Minimum Usable Battery Bank: <strong>${usableKwh} kWh</strong> (${Math.ceil((wh / 0.8) / 5120)}× 48V 100Ah 5.12 kWh LiFePO4 batteries)<br/>
+        • Max Inverter Current Draw: <strong>~${amps} Amps</strong> at ${v}V &rarr; Use <strong>${wireGauge}</strong> with a <strong>${fuseAmps}A Class-T Fuse</strong><br/>
+        • Recommended Solar Array for ${sun} Peak Sun Hours: <strong>${pvWatts}W of Solar Panels</strong>
+        <ul class="rec-list">
+          <li><a href="https://www.litime.com/products/48v-100ah-8d-lithium-battery?ref=${AFFILIATE_TAG}" target="_blank" rel="noopener">LiTime 48V 100Ah (5.12 kWh) LiFePO4 Battery — Check Current Price</a></li>
+          <li><a href="https://www.eco-worthy.com/products/3500w-solar-off-grid-inverter-charger-48v-dc-to-120v-ac-split-phase-power-inverter?ref=${AFFILIATE_TAG}" target="_blank" rel="noopener">Eco-Worthy 3500W 48V All-in-One Hybrid Solar Inverter — Check Current Price</a></li>
+          <li><a href="https://www.vanlifeoutfitters.com/products/blue-sea-class-t-fuse-block-5502?ref=${AFFILIATE_TAG}" target="_blank" rel="noopener">Blue Sea Systems 5502 Class-T Fuse Block — Check Current Price</a></li>
+        </ul>
+      `;
+    }
+    calcSolar();
+  </script>
+</body>
+</html>

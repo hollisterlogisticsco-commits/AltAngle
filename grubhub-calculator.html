@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Grubhub & Delivery Driver Earnings & True Net Payout Calculator | AltAngle</title>
+  <meta name="description" content="Free interactive Grubhub driver earnings, fuel cost, IRS mileage tax deduction, self-employment tax, and true net hourly take-home pay calculator." />
+  <style>
+    :root { --navy: #1e3a5f; --teal: #0d9488; --orange: #ea580c; --bg: #f8fafc; --card: #ffffff; --border: #cbd5e1; }
+    * { box-sizing: border-box; font-family: system-ui, -apple-system, sans-serif; }
+    body { margin: 0; background: var(--bg); color: #0f172a; line-height: 1.5; }
+    header { background: var(--navy); color: #fff; padding: 1.75rem 1rem; text-align: center; }
+    header h1 { margin: 0 0 0.5rem; font-size: 1.6rem; }
+    header p { margin: 0; opacity: 0.9; font-size: 0.98rem; }
+    nav { margin-top: 0.75rem; }
+    nav a { color: #99f6e4; margin: 0 0.6rem; text-decoration: none; font-weight: 600; font-size: 0.92rem; }
+    nav a:hover { text-decoration: underline; }
+    main { max-width: 880px; margin: 1.5rem auto; padding: 0 1rem 3rem; }
+    .card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem; box-shadow: 0 2px 6px rgba(0,0,0,0.04); }
+    h2 { margin-top: 0; color: var(--navy); font-size: 1.3rem; border-bottom: 2px solid #e2e8f0; padding-bottom: 0.5rem; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 1rem; }
+    label { display: block; font-size: 0.88rem; font-weight: 600; margin-bottom: 0.3rem; color: #334155; }
+    input, select { width: 100%; padding: 0.6rem; border: 1px solid var(--border); border-radius: 6px; font-size: 1rem; }
+    button { background: var(--teal); color: #fff; border: none; padding: 0.75rem 1.25rem; font-size: 1rem; font-weight: 600; border-radius: 6px; cursor: pointer; }
+    button:hover { opacity: 0.92; }
+    .results { background: #f0fdfa; border: 1px solid #99f6e4; border-radius: 8px; padding: 1rem; margin-top: 1rem; }
+    .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(175px, 1fr)); gap: 0.75rem; margin: 0.75rem 0; }
+    .kpi { background: #fff; border: 1px solid #cbd5e1; border-radius: 8px; padding: 0.75rem; }
+    .kpi span { display: block; font-size: 0.8rem; color: #64748b; }
+    .kpi strong { font-size: 1.25rem; color: var(--navy); }
+    .rec-list { margin-top: 1rem; padding-left: 1.2rem; }
+    .rec-list li { margin-bottom: 0.5rem; }
+    .rec-list a { color: var(--teal); font-weight: 600; text-decoration: none; }
+    .rec-list a:hover { text-decoration: underline; }
+    .disclosure { font-size: 0.8rem; color: #64748b; margin-top: 2rem; text-align: center; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Grubhub &amp; Delivery Driver Earnings &amp; True Net Payout Calculator</h1>
+    <p>Calculate your real take-home pay after fuel, maintenance, instant cashout fees, and IRS mileage tax write-offs</p>
+    <nav>
+      <a href="./index.html">All Calculators</a>
+      <a href="./grubhub-calculator.html">Grubhub Payout Calculator</a>
+      <a href="./solar-calculator.html">Solar Sizing Calculator</a>
+      <a href="./debt-snowball-calculator.html">Debt Snowball Calculator</a>
+    </nav>
+  </header>
+  <main>
+    <section class="card" id="grubhub-calculator">
+      <h2>Grubhub Shift &amp; Weekly Net Payout Calculator</h2>
+      <div class="grid">
+        <div>
+          <label for="ghBasePay">Base Delivery &amp; Mileage Pay ($)</label>
+          <input type="number" id="ghBasePay" value="340" min="0" step="10" />
+        </div>
+        <div>
+          <label for="ghTips">Customer Tips + Missions ($)</label>
+          <input type="number" id="ghTips" value="285" min="0" step="10" />
+        </div>
+        <div>
+          <label for="ghHours">Active Hours Worked</label>
+          <input type="number" id="ghHours" value="25" min="1" step="0.5" />
+        </div>
+        <div>
+          <label for="ghMiles">Total Miles Driven</label>
+          <input type="number" id="ghMiles" value="410" min="1" step="10" />
+        </div>
+        <div>
+          <label for="ghMpg">Vehicle Fuel Economy (MPG)</label>
+          <input type="number" id="ghMpg" value="28" min="8" step="1" />
+        </div>
+        <div>
+          <label for="ghGasPrice">Gas Price ($ / Gallon)</label>
+          <input type="number" id="ghGasPrice" value="3.15" min="1" step="0.05" />
+        </div>
+        <div>
+          <label for="ghMaintPerMile">Wear &amp; Maintenance Reserve ($/mi)</label>
+          <input type="number" id="ghMaintPerMile" value="0.09" min="0" step="0.01" />
+        </div>
+        <div>
+          <label for="ghCashouts">Instant Cashouts Used ($0.50 ea)</label>
+          <input type="number" id="ghCashouts" value="2" min="0" step="1" />
+        </div>
+      </div>
+      <button onclick="calcGrubhub()">Calculate True Net Payout</button>
+      <div class="results" id="ghOut"></div>
+    </section>
+  </main>
+  <p class="disclosure">Disclosure: Links to recommended gear or templates may include affiliate or creator referral tags at zero extra cost to you.</p>
+  <script>
+    function calcGrubhub() {
+      const base = parseFloat(document.getElementById('ghBasePay').value) || 0;
+      const tips = parseFloat(document.getElementById('ghTips').value) || 0;
+      const hours = Math.max(0.5, parseFloat(document.getElementById('ghHours').value) || 25);
+      const miles = Math.max(0, parseFloat(document.getElementById('ghMiles').value) || 0);
+      const mpg = Math.max(5, parseFloat(document.getElementById('ghMpg').value) || 28);
+      const gas = Math.max(0, parseFloat(document.getElementById('ghGasPrice').value) || 3.15);
+      const maintRate = Math.max(0, parseFloat(document.getElementById('ghMaintPerMile').value) || 0.09);
+      const cashouts = Math.max(0, parseInt(document.getElementById('ghCashouts').value, 10) || 0);
+
+      const gross = base + tips;
+      const cashoutFee = cashouts * 0.50;
+      const bankPayout = Math.max(0, gross - cashoutFee);
+      const fuelCost = (miles / mpg) * gas;
+      const maintCost = miles * maintRate;
+      const irsRate = 0.70; // standard IRS business mileage rate estimate
+      const irsDeduction = miles * irsRate;
+      const taxableNet = Math.max(0, gross - irsDeduction);
+      const estSeTax = taxableNet * 0.153;
+      const trueNet = bankPayout - fuelCost - maintCost - estSeTax;
+      const grossHourly = gross / hours;
+      const trueHourly = trueNet / hours;
+      const dollarsPerMile = miles > 0 ? (gross / miles) : 0;
+
+      document.getElementById('ghOut').innerHTML = `
+        <strong>Grubhub Earnings &amp; True Take-Home Summary:</strong>
+        <div class="kpi-grid">
+          <div class="kpi"><span>Gross App Earnings</span><strong>$${gross.toFixed(2)}</strong></div>
+          <div class="kpi"><span>Direct Bank Payout</span><strong>$${bankPayout.toFixed(2)}</strong></div>
+          <div class="kpi"><span>Fuel + Maintenance Cost</span><strong>-$${(fuelCost + maintCost).toFixed(2)}</strong></div>
+          <div class="kpi"><span>IRS Mileage Write-Off ($0.70/mi)</span><strong>$${irsDeduction.toFixed(2)}</strong></div>
+          <div class="kpi"><span>Est. SE Tax After Mileage</span><strong>-$${estSeTax.toFixed(2)}</strong></div>
+          <div class="kpi"><span>True Net Profit</span><strong>$${trueNet.toFixed(2)}</strong></div>
+        </div>
+        • Gross Hourly Rate: <strong>$${grossHourly.toFixed(2)}/hr</strong> &rarr; True Net Hourly (after gas, wear &amp; tax): <strong>$${trueHourly.toFixed(2)}/hr</strong><br/>
+        • Gross Revenue per Mile: <strong>$${dollarsPerMile.toFixed(2)}/mile</strong> (Target $1.50+/mile for top profit)<br/>
+        • Fuel Used: <strong>${(miles / mpg).toFixed(1)} gal</strong> ($${fuelCost.toFixed(2)} gas + $${maintCost.toFixed(2)} maintenance reserve + $${cashoutFee.toFixed(2)} cashout fees)
+        <ul class="rec-list">
+          <li><a href="./index.html#debt-calculator">Use the Debt Snowball &amp; Budget Calculator to plan your weekly payout goals</a></li>
+        </ul>
+      `;
+    }
+    calcGrubhub();
+  </script>
+</body>
+</html>
