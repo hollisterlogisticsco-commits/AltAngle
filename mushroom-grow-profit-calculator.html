@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mushroom Growing Yield &amp; Profit Calculator (Oyster, Lion's Mane, Shiitake) | AltAngle</title>
+  <meta name="description" content="Free mushroom farm yield and profit calculator. Enter blocks per batch, substrate weight, biological efficiency, cost per block, and price per pound to estimate harvest, monthly profit, cost per pound, and break-even price." />
+  <meta name="keywords" content="mushroom yield calculator, mushroom farm profit calculator, biological efficiency calculator, oyster mushroom profit, lion's mane grow calculator, small mushroom farm income" />
+  <link rel="canonical" href="./mushroom-grow-profit-calculator.html" />
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"FAQPage","mainEntity":[
+   {"@type":"Question","name":"What is biological efficiency in mushroom growing?","acceptedAnswer":{"@type":"Answer","text":"Biological efficiency (BE) is the weight of fresh mushrooms harvested divided by the dry weight of the substrate, shown as a percent. For example, 5 lb of fresh mushrooms from 5 lb of dry substrate is 100% BE."}},
+   {"@type":"Question","name":"How do I figure my break-even price per pound?","acceptedAnswer":{"@type":"Answer","text":"Add your per-block costs for the month (substrate, spawn, bags) plus monthly overhead (power, water, packaging, market fees), then divide by the pounds you actually expect to sell after spoilage."}}
+  ]}
+  </script>
+  <style>
+    :root { --navy:#1e3a5f; --teal:#0d9488; --bg:#f8fafc; --card:#fff; --border:#cbd5e1; --red:#b91c1c; --green:#15803d; }
+    * { box-sizing:border-box; font-family:system-ui,-apple-system,sans-serif; }
+    body { margin:0; background:var(--bg); color:#0f172a; line-height:1.5; }
+    header { background:var(--navy); color:#fff; padding:1.75rem 1rem; text-align:center; }
+    header h1 { margin:0 0 .5rem; font-size:1.6rem; }
+    header p { margin:0; opacity:.9; font-size:.98rem; }
+    nav { margin-top:.75rem; }
+    nav a { color:#99f6e4; margin:0 .6rem; text-decoration:none; font-weight:600; font-size:.92rem; display:inline-block; }
+    main { max-width:860px; margin:1.5rem auto; padding:0 1rem 3rem; }
+    .card { background:var(--card); border:1px solid var(--border); border-radius:12px; padding:1.5rem; box-shadow:0 2px 6px rgba(0,0,0,.04); margin-bottom:1.25rem; }
+    h2 { margin-top:0; color:var(--navy); font-size:1.3rem; border-bottom:2px solid #e2e8f0; padding-bottom:.5rem; }
+    h3 { color:var(--navy); font-size:1.05rem; margin:1rem 0 .5rem; }
+    .grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(210px,1fr)); gap:1rem; }
+    label { display:block; font-weight:600; font-size:.9rem; margin-bottom:.3rem; }
+    input { width:100%; padding:.6rem; border:1px solid var(--border); border-radius:8px; font-size:1rem; }
+    .results { display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:.75rem; margin-top:1rem; }
+    .stat { background:#f1f5f9; border-radius:10px; padding:.9rem; text-align:center; }
+    .stat .v { font-size:1.45rem; font-weight:700; color:var(--navy); }
+    .stat .l { font-size:.82rem; color:#475569; }
+    .verdict { margin-top:1rem; padding:1rem; border-radius:10px; font-weight:600; text-align:center; }
+    .good { background:#dcfce7; color:var(--green); } .bad { background:#fee2e2; color:var(--red); } .meh { background:#fef9c3; color:#854d0e; }
+    .aff li { margin:.4rem 0; } .aff a { color:var(--teal); font-weight:600; }
+    small { color:#64748b; }
+    footer { text-align:center; font-size:.8rem; color:#64748b; padding:1rem; }
+  </style>
+</head>
+<body>
+<header>
+  <h1>Mushroom Growing Yield &amp; Profit Calculator</h1>
+  <p>Estimate harvest, monthly profit, and break-even price for a small oyster, lion's mane, or shiitake grow.</p>
+  <nav>
+    <a href="./index.html">Home</a>
+    <a href="./hotshot-load-profit-calculator.html">Hotshot Load Profit</a>
+    <a href="./grubhub-calculator.html">Grubhub Payout</a>
+    <a href="./solar-calculator.html">Solar Sizing</a>
+    <a href="./debt-snowball-calculator.html">Debt Snowball</a>
+  </nav>
+</header>
+<main>
+  <section class="card">
+    <h2>1. Your Grow</h2>
+    <div class="grid">
+      <div><label for="preset">Quick-fill example</label>
+        <select id="preset" style="width:100%;padding:.6rem;border:1px solid var(--border);border-radius:8px;font-size:1rem">
+          <option value="">Custom (my own numbers)</option>
+          <option value="oyster">Oyster (example numbers)</option>
+          <option value="lion">Lion's mane (example numbers)</option>
+          <option value="shiitake">Shiitake (example numbers)</option>
+        </select></div>
+      <div><label for="blocks">Blocks (bags) started per batch</label><input id="blocks" type="number" value="20" min="0"></div>
+      <div><label for="dry">Dry substrate per block (lb)</label><input id="dry" type="number" value="2.5" min="0" step="0.1"></div>
+      <div><label for="be">Biological efficiency, all flushes (%)</label><input id="be" type="number" value="75" min="0" step="1"></div>
+      <div><label for="contam">Contaminated / failed blocks (%)</label><input id="contam" type="number" value="10" min="0" max="100"></div>
+      <div><label for="cycle">Weeks from inoculation to last harvest</label><input id="cycle" type="number" value="6" min="1" step="0.5"></div>
+      <div><label for="batches">New batches started per month</label><input id="batches" type="number" value="2" min="0" step="0.5"></div>
+    </div>
+    <small>Example numbers are only starting points. Replace them with your own results after a batch or two.</small>
+  </section>
+  <section class="card">
+    <h2>2. Costs &amp; Price</h2>
+    <div class="grid">
+      <div><label for="cpb">Cost per block: substrate + spawn + bag ($)</label><input id="cpb" type="number" value="4.50" min="0" step="0.05"></div>
+      <div><label for="overhead">Monthly overhead: power, water, packaging, fees ($)</label><input id="overhead" type="number" value="60" min="0"></div>
+      <div><label for="price">Selling price per lb ($)</label><input id="price" type="number" value="12" min="0" step="0.25"></div>
+      <div><label for="spoil">Unsold / spoiled harvest (%)</label><input id="spoil" type="number" value="10" min="0" max="100"></div>
+      <div><label for="hours">Your hours per month</label><input id="hours" type="number" value="20" min="0"></div>
+    </div>
+  </section>
+  <section class="card">
+    <h2>3. Results</h2>
+    <div class="results" id="out"></div>
+    <div class="verdict" id="verdict"></div>
+  </section>
+  <section class="card">
+    <h2>How the math works</h2>
+    <p><b>Fresh yield per block</b> = dry substrate weight &times; biological efficiency. Contaminated blocks are removed before totals. <b>Sellable pounds</b> subtract your spoilage percent. <b>Break-even price</b> = (block costs + overhead) &divide; sellable pounds. <b>Racks in use</b> estimates how many blocks are fruiting or colonizing at once, based on your cycle length.</p>
+  </section>
+  <section class="card">
+    <h2>Gear that helps</h2>
+    <ul class="aff">
+      <li><a href="https://www.amazon.com/s?k=mushroom+grow+bags+filter+patch&tag=${AFFILIATE_TAG}" target="_blank" rel="noopener sponsored">Filter-patch mushroom grow bags</a></li>
+      <li><a href="https://www.amazon.com/s?k=mushroom+grain+spawn&tag=${AFFILIATE_TAG}" target="_blank" rel="noopener sponsored">Grain spawn (oyster, lion's mane, shiitake)</a></li>
+      <li><a href="https://www.amazon.com/s?k=ultrasonic+humidifier+mushroom+fruiting&tag=${AFFILIATE_TAG}" target="_blank" rel="noopener sponsored">Humidifier for a fruiting chamber</a></li>
+      <li><a href="https://www.amazon.com/s?k=digital+kitchen+scale+5kg&tag=${AFFILIATE_TAG}" target="_blank" rel="noopener sponsored">Digital scale to weigh substrate and harvests</a></li>
+    </ul>
+    <p><small>Some links are affiliate links; we may earn a small commission at no extra cost to you.</small></p>
+  </section>
+</main>
+<footer>&copy; 2026 AltAngle Calculators. Estimates only; actual yields vary with strain, substrate, and conditions.</footer>
+<script>
+const $=id=>document.getElementById(id);
+const presets={oyster:{dry:2.5,be:75,contam:10,cycle:6,cpb:4.5,price:12},
+               lion:{dry:2.5,be:50,contam:15,cycle:7,cpb:5,price:16},
+               shiitake:{dry:3,be:60,contam:15,cycle:16,cpb:5.5,price:14}};
+$("preset").addEventListener("change",e=>{const p=presets[e.target.value]; if(!p) return;
+  for(const k in p) $(k).value=p[k]; calc();});
+const money=n=>(n<0?"-$":"$")+Math.abs(n).toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2});
+function calc(){
+  const v=k=>parseFloat($(k).value)||0;
+  const blocks=v("blocks"),dry=v("dry"),be=v("be")/100,contam=Math.min(v("contam"),100)/100,
+        cycle=v("cycle"),batches=v("batches"),cpb=v("cpb"),overhead=v("overhead"),
+        price=v("price"),spoil=Math.min(v("spoil"),100)/100,hours=v("hours");
+  const perBlock=dry*be, goodBlocks=blocks*(1-contam), batchLb=goodBlocks*perBlock;
+  const monthLb=batchLb*batches, sellLb=monthLb*(1-spoil);
+  const revenue=sellLb*price, cost=blocks*batches*cpb+overhead, profit=revenue-cost;
+  const be_price=sellLb>0?cost/sellLb:0, costLb=monthLb>0?cost/monthLb:0;
+  const inUse=Math.ceil(blocks*batches*(cycle/4.33)), hourly=hours>0?profit/hours:0;
+  const stats=[["Fresh yield per good block",perBlock.toFixed(2)+" lb"],["Harvest per batch",batchLb.toFixed(1)+" lb"],
+    ["Harvest per month",monthLb.toFixed(1)+" lb"],["Sellable per month",sellLb.toFixed(1)+" lb"],
+    ["Monthly revenue",money(revenue)],["Monthly costs",money(cost)],["Monthly profit",money(profit)],
+    ["Yearly profit (x12)",money(profit*12)],["Grow cost per lb",money(costLb)],["Break-even price / lb",money(be_price)],
+    ["Profit per hour",money(hourly)],["Blocks in the room at once",inUse]];
+  $("out").innerHTML=stats.map(s=>`<div class="stat"><div class="v">${s[1]}</div><div class="l">${s[0]}</div></div>`).join("");
+  const vd=$("verdict");
+  if(sellLb<=0){vd.className="verdict meh";vd.textContent="Enter your grow numbers to see results.";}
+  else if(price<be_price){vd.className="verdict bad";vd.textContent=`Losing money: you need at least ${money(be_price)}/lb to break even.`;}
+  else if(profit/revenue<0.3){vd.className="verdict meh";vd.textContent=`Thin margin (${Math.round(profit/revenue*100)}%). Cut contamination or raise price.`;}
+  else {vd.className="verdict good";vd.textContent=`Healthy margin: ${Math.round(profit/revenue*100)}% of revenue is profit.`;}
+}
+document.querySelectorAll("input").forEach(i=>i.addEventListener("input",calc)); calc();
+</script>
+</body>
+</html>
