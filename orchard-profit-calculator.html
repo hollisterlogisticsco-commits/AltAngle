@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Satsuma &amp; Small Orchard Startup Cost, Payback &amp; Profit Calculator | AltAngle</title>
+  <meta name="description" content="Free orchard profit calculator for satsuma, citrus, peach, fig, and other fruit trees. Enter acres, tree spacing, startup costs, yield, and price to see startup cost, years to payback, and a 10-year cash flow table." />
+  <meta name="keywords" content="satsuma orchard profit calculator, citrus orchard startup cost, fruit tree orchard payback calculator, small orchard income, trees per acre calculator, u-pick orchard profit" />
+  <link rel="canonical" href="./orchard-profit-calculator.html" />
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"FAQPage","mainEntity":[
+   {"@type":"Question","name":"How many trees per acre can I plant?","acceptedAnswer":{"@type":"Answer","text":"Trees per acre = 43,560 square feet divided by (row spacing x in-row spacing). For example, 20 ft rows with trees 12 ft apart gives about 181 trees per acre."}},
+   {"@type":"Question","name":"How long until an orchard pays for itself?","acceptedAnswer":{"@type":"Answer","text":"Add your startup cost plus yearly care costs, then compare them with net sales each year as trees come into bearing. The payback year is the first year your running total turns positive. This calculator builds that table for you."}}
+  ]}
+  </script>
+  <style>
+    :root { --navy:#1e3a5f; --teal:#0d9488; --bg:#f8fafc; --card:#fff; --border:#cbd5e1; --red:#b91c1c; --green:#15803d; }
+    * { box-sizing:border-box; font-family:system-ui,-apple-system,sans-serif; }
+    body { margin:0; background:var(--bg); color:#0f172a; line-height:1.5; }
+    header { background:var(--navy); color:#fff; padding:1.75rem 1rem; text-align:center; }
+    header h1 { margin:0 0 .5rem; font-size:1.6rem; }
+    header p { margin:0; opacity:.9; font-size:.98rem; }
+    nav { margin-top:.75rem; }
+    nav a { color:#99f6e4; margin:0 .6rem; text-decoration:none; font-weight:600; font-size:.92rem; display:inline-block; }
+    main { max-width:860px; margin:1.5rem auto; padding:0 1rem 3rem; }
+    .card { background:var(--card); border:1px solid var(--border); border-radius:12px; padding:1.5rem; box-shadow:0 2px 6px rgba(0,0,0,.04); margin-bottom:1.25rem; }
+    h2 { margin-top:0; color:var(--navy); font-size:1.3rem; border-bottom:2px solid #e2e8f0; padding-bottom:.5rem; }
+    h3 { color:var(--navy); font-size:1.05rem; margin:1rem 0 .5rem; }
+    .grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(210px,1fr)); gap:1rem; }
+    label { display:block; font-weight:600; font-size:.9rem; margin-bottom:.3rem; }
+    input { width:100%; padding:.6rem; border:1px solid var(--border); border-radius:8px; font-size:1rem; }
+    .results { display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:.75rem; margin-top:1rem; }
+    .stat { background:#f1f5f9; border-radius:10px; padding:.9rem; text-align:center; }
+    .stat .v { font-size:1.45rem; font-weight:700; color:var(--navy); }
+    .stat .l { font-size:.82rem; color:#475569; }
+    .verdict { margin-top:1rem; padding:1rem; border-radius:10px; font-weight:600; text-align:center; }
+    .good { background:#dcfce7; color:var(--green); } .bad { background:#fee2e2; color:var(--red); } .meh { background:#fef9c3; color:#854d0e; }
+    .aff li { margin:.4rem 0; } .aff a { color:var(--teal); font-weight:600; }
+    small { color:#64748b; }
+    footer { text-align:center; font-size:.8rem; color:#64748b; padding:1rem; }
+  </style>
+  <style>table{width:100%;border-collapse:collapse;font-size:.88rem}th,td{border:1px solid var(--border);padding:.4rem;text-align:right}th{background:var(--navy);color:#fff}td:first-child,th:first-child{text-align:center}.neg{color:var(--red)}.tw{overflow-x:auto}</style>
+</head>
+<body>
+<header>
+  <h1>Satsuma &amp; Small Orchard Profit Calculator</h1>
+  <p>Startup cost, years to payback, and a 10-year cash flow for a small fruit orchard.</p>
+  <nav>
+    <a href="./index.html">Home</a>
+    <a href="./hotshot-load-profit-calculator.html">Hotshot Load Profit</a>
+    <a href="./grubhub-calculator.html">Grubhub Payout</a>
+    <a href="./solar-calculator.html">Solar Sizing</a>
+    <a href="./debt-snowball-calculator.html">Debt Snowball</a>
+    <a href="./mushroom-grow-profit-calculator.html">Mushroom Profit</a>
+  </nav>
+</header>
+<main>
+  <section class="card">
+    <h2>1. Your Orchard</h2>
+    <div class="grid">
+      <div><label for="preset">Quick-fill example</label>
+        <select id="preset" style="width:100%;padding:.6rem;border:1px solid var(--border);border-radius:8px;font-size:1rem">
+          <option value="">Custom (my own numbers)</option>
+          <option value="satsuma">Satsuma (example numbers)</option>
+          <option value="peach">Peach (example numbers)</option>
+          <option value="fig">Fig (example numbers)</option>
+        </select></div>
+      <div><label for="acres">Acres planted</label><input id="acres" type="number" value="1" min="0" step="0.25"></div>
+      <div><label for="rows">Row spacing (ft)</label><input id="rows" type="number" value="20" min="1"></div>
+      <div><label for="inrow">Tree spacing in the row (ft)</label><input id="inrow" type="number" value="12" min="1"></div>
+      <div><label for="loss">Trees lost before bearing (%)</label><input id="loss" type="number" value="5" min="0" max="100"></div>
+      <div><label for="first">Year of first real crop</label><input id="first" type="number" value="3" min="1" max="10"></div>
+      <div><label for="full">Year of full production</label><input id="full" type="number" value="7" min="1" max="10"></div>
+      <div><label for="yield">Yield per mature tree (lb / year)</label><input id="yield" type="number" value="100" min="0"></div>
+    </div>
+    <small>Example numbers are only placeholders. Check your local extension office or nursery for yields and spacing that fit your variety and area.</small>
+  </section>
+  <section class="card">
+    <h2>2. Costs &amp; Price</h2>
+    <div class="grid">
+      <div><label for="tree">Cost per tree, delivered ($)</label><input id="tree" type="number" value="30" min="0" step="0.5"></div>
+      <div><label for="setup">Setup per acre: clearing, irrigation, fencing ($)</label><input id="setup" type="number" value="2500" min="0"></div>
+      <div><label for="care">Yearly care per tree: fertilizer, sprays, water ($)</label><input id="care" type="number" value="8" min="0" step="0.5"></div>
+      <div><label for="fixed">Other yearly costs: mowing, insurance, frost cloth ($)</label><input id="fixed" type="number" value="600" min="0"></div>
+      <div><label for="price">Selling price per lb ($)</label><input id="price" type="number" value="1.50" min="0" step="0.05"></div>
+      <div><label for="pick">Picking, packing &amp; sales cost per lb ($)</label><input id="pick" type="number" value="0.25" min="0" step="0.05"></div>
+      <div><label for="unsold">Unsold / culled fruit (%)</label><input id="unsold" type="number" value="15" min="0" max="100"></div>
+    </div>
+  </section>
+  <section class="card">
+    <h2>3. Results</h2>
+    <div class="results" id="out"></div>
+    <div class="verdict" id="verdict"></div>
+    <h3>10-year cash flow</h3>
+    <div class="tw"><table id="tbl"></table></div>
+  </section>
+  <section class="card">
+    <h2>How the math works</h2>
+    <p><b>Trees per acre</b> = 43,560 &divide; (row spacing &times; in-row spacing). <b>Startup cost</b> = trees &times; cost per tree + setup per acre &times; acres. Yield ramps up in a straight line from the first-crop year to the full-production year. <b>Net per lb</b> = price minus picking and sales cost, and only sellable fruit (after culls) is counted. <b>Payback year</b> is the first year the running total turns positive.</p>
+  </section>
+  <section class="card">
+    <h2>Gear that helps</h2>
+    <ul class="aff">
+      <li><a href="https://www.amazon.com/s?k=drip+irrigation+kit+orchard&amp;tag=${AFFILIATE_TAG}" target="_blank" rel="noopener sponsored">Drip irrigation kit for fruit trees</a></li>
+      <li><a href="https://www.amazon.com/s?k=frost+cloth+plant+cover+large&amp;tag=${AFFILIATE_TAG}" target="_blank" rel="noopener sponsored">Frost cloth for citrus on cold nights</a></li>
+      <li><a href="https://www.amazon.com/s?k=citrus+tree+fertilizer&amp;tag=${AFFILIATE_TAG}" target="_blank" rel="noopener sponsored">Citrus and fruit tree fertilizer</a></li>
+      <li><a href="https://www.amazon.com/s?k=fruit+picking+bag+harvest&amp;tag=${AFFILIATE_TAG}" target="_blank" rel="noopener sponsored">Fruit picking bags and harvest bins</a></li>
+      <li><a href="#gumroad-pack">Orchard Planner &amp; Harvest Profit Tracker (Excel + printable PDF)</a></li>
+    </ul>
+    <p><small>Some links are affiliate links; we may earn a small commission at no extra cost to you.</small></p>
+  </section>
+</main>
+<footer>&copy; 2026 AltAngle Calculators. Estimates only; actual yields and prices vary with variety, weather, and market.</footer>
+<script>
+const $=id=>document.getElementById(id);
+const presets={satsuma:{rows:20,inrow:12,first:3,full:7,yield:100,tree:30,care:8,price:1.5,pick:0.25,unsold:15},
+               peach:{rows:20,inrow:18,first:3,full:5,yield:120,tree:25,care:15,price:2,pick:0.35,unsold:20},
+               fig:{rows:15,inrow:12,first:2,full:4,yield:40,tree:25,care:5,price:4,pick:0.75,unsold:25}};
+$("preset").addEventListener("change",e=>{const p=presets[e.target.value]; if(!p) return; for(const k in p) $(k).value=p[k]; calc();});
+const money=n=>(n<0?"-$":"$")+Math.abs(n).toLocaleString(undefined,{maximumFractionDigits:0});
+function calc(){
+  const v=k=>parseFloat($(k).value)||0;
+  const acres=v("acres"),rows=Math.max(v("rows"),1),inrow=Math.max(v("inrow"),1),loss=Math.min(v("loss"),100)/100,
+        first=Math.max(1,Math.round(v("first"))),full=Math.max(first,Math.round(v("full"))),yld=v("yield"),
+        tree=v("tree"),setup=v("setup"),care=v("care"),fixed=v("fixed"),price=v("price"),pick=v("pick"),unsold=Math.min(v("unsold"),100)/100;
+  const tpa=43560/(rows*inrow), trees=Math.round(tpa*acres), bearing=trees*(1-loss);
+  const startup=trees*tree+setup*acres+trees*loss*tree; // replant lost trees
+  const netLb=price-pick, yearlyCost=trees*care+fixed;
+  let cum=-startup, payback=null, rowsH="<tr><th>Year</th><th>Yield %</th><th>Lb sold</th><th>Net sales</th><th>Costs</th><th>Year profit</th><th>Running total</th></tr>";
+  let matureProfit=0, matureLb=0;
+  for(let y=1;y<=10;y++){
+    let pct=y<first?0:(full===first?1:Math.min(1,(y-first+1)/(full-first+1)));
+    const lb=bearing*yld*pct*(1-unsold), sales=lb*netLb, prof=sales-yearlyCost;
+    cum+=prof; if(payback===null&&cum>=0) payback=y;
+    if(y===10){matureProfit=prof;matureLb=lb;}
+    rowsH+=`<tr><td>${y}</td><td>${Math.round(pct*100)}%</td><td>${Math.round(lb).toLocaleString()}</td><td>${money(sales)}</td><td>${money(yearlyCost)}</td><td class="${prof<0?'neg':''}">${money(prof)}</td><td class="${cum<0?'neg':''}">${money(cum)}</td></tr>`;
+  }
+  $("tbl").innerHTML=rowsH;
+  const be=matureLb>0?(yearlyCost/matureLb+pick):0;
+  const stats=[["Trees per acre",Math.round(tpa)],["Total trees",trees.toLocaleString()],["Startup cost",money(startup)],
+    ["Yearly care costs",money(yearlyCost)],["Sellable lb at maturity",Math.round(matureLb).toLocaleString()],
+    ["Yearly profit at maturity",money(matureProfit)],["Profit per acre at maturity",money(acres>0?matureProfit/acres:0)],
+    ["Break-even price / lb at maturity","$"+be.toFixed(2)],["Payback year",payback?("Year "+payback):"Over 10 years"],["10-year running total",money(cum)]];
+  $("out").innerHTML=stats.map(s=>`<div class="stat"><div class="v">${s[1]}</div><div class="l">${s[0]}</div></div>`).join("");
+  const vd=$("verdict");
+  if(trees<=0){vd.className="verdict meh";vd.textContent="Enter your orchard numbers to see results.";}
+  else if(matureProfit<=0){vd.className="verdict bad";vd.textContent=`Even at full production this loses money. You'd need about $${be.toFixed(2)}/lb to break even.`;}
+  else if(!payback||payback>8){vd.className="verdict meh";vd.textContent=`Profitable once mature, but slow to pay back${payback?" (year "+payback+")":""}. Try lower setup costs or direct sales at a higher price.`;}
+  else {vd.className="verdict good";vd.textContent=`Pays for itself in year ${payback}, then about ${money(matureProfit)} a year at full production.`;}
+}
+document.querySelectorAll("input").forEach(i=>i.addEventListener("input",calc)); calc();
+</script>
+</body>
+</html>
